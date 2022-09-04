@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "incremental": true /* Enable incremental compilation */,
     "target": "ES2019" /* Specify ECMAScript target version: */,
     "module": "commonjs" /* 'none', 'commonjs', 'amd', 'system', etc */,
     "declaration": true /* Concatenate & emit output to single file.*/,
