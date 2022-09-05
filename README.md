@@ -2,6 +2,9 @@
 
 Simple state management (React optional)
 
+## Example
+https://githubbox.com/anduong96/Tiamut/tree/main/example
+
 ## Installation
 
 ```bash
