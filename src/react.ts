@@ -106,7 +106,9 @@ export function createStoreHook<
   }
 
   function modSelectors() {
-    return mergeBy(selectors, (selector) => () => makeHook(selector));
+    return mergeBy(selectors, (selector) => () => makeHook(selector)) as {
+      [K in keyof O]: () => ReturnType<O[K]>;
+    };
   }
 
   return {
