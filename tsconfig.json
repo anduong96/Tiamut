@@ -7,10 +7,8 @@
     "moduleResolution": "node",
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
-    "baseUrl": ".",
-    "jsxFactory": "",
-    "jsxFragmentFactory": ""
+    "baseUrl": "."
   },
-  "include": ["src/**/*", "types/**/*.d.ts"],
+  "include": ["src/**/*", "tests/**/*", "types/**/*.d.ts"],
   "exclude": ["node_modules", "dist"]
 }
