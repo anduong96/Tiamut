@@ -18,7 +18,7 @@ import { createStoreHook } from "tiamut";
 const store = createStoreHook({
   initialState: {
     value: 1,
-  }
+  },
   actions: {
     addOne(state) {
       state.value += 1;
@@ -52,7 +52,7 @@ import { createStoreHook } from "tiamut";
 const store = createStoreHook({
   initialState: {
     value: 1,
-  }
+  },
   actions: {
     addOne(state) {
       state.value += 1;

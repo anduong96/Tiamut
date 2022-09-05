@@ -10,7 +10,7 @@ const defaultState = {
 }
 
 const fooStore = createStore(
-  initialState: load(),
+  initialState,
   actions: {
     inc(state) {
       state.value += 1;
