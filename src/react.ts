@@ -15,7 +15,7 @@ import type {
 
 import React from 'react';
 import { createStore } from './create.store';
-import { mergeBy } from './merge.by';
+import { mergeBy } from './lib/merge.by';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector';
 
 function isStore<S, A extends ActionsMap<S>>(

@@ -9,7 +9,7 @@ export type Listener<T, K> = (
   actionName: K | 'setState',
 ) => void;
 
-export type Action<T> = (state: T, ...params: any[]) => void | T;
+export type Action<T> = (state: T, ...params: any[]) => T;
 
 export type ActionsMap<T> = { [key: string]: Action<T> };
 export type ModActionMap<S, T extends ActionsMap<S>> = {

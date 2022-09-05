@@ -1,7 +1,7 @@
 import type { Action, ActionsMap, Listener, Store } from './types';
 
-import { mergeBy } from './merge.by';
-import produce from 'immer';
+import { isStateObject } from './lib/is.state.object';
+import { mergeBy } from './lib/merge.by';
 
 /**
  * It takes an initial state and an actions object, and returns an object with a setState function, a
@@ -44,7 +44,7 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
    * It returns a copy of the initial state object, but with the `Object.freeze()` method applied to it
    */
   function getInitialState() {
-    return Object.freeze(initialState);
+    return initialState;
   }
 
   /**
@@ -55,28 +55,16 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
   }
 
   /**
-   * If the target is not a function, then it is a state object.
-   */
-  function isStateObject(target: S | Action<S>): target is S {
-    return typeof target !== 'function';
-  }
-
-  /**
    * It takes a new state or an action function that produces a new state, and returns the new state
    */
   function setState(
     nextState: S | Action<S>,
     actionName?: keyof typeof actions,
   ): S {
-    const newState = isStateObject(nextState)
-      ? nextState
-      : produce(state, nextState);
-
+    const newState = isStateObject(nextState) ? nextState : nextState(state);
     const previousState = state;
     state = newState;
-
     publish(previousState, actionName || 'setState');
-
     return state;
   }
 

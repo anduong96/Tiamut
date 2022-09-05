@@ -7,7 +7,9 @@ describe('Basic object test', () => {
     initialState: init,
     actions: {
       add(state, value: number) {
-        state.test += value;
+        const nextState = { ...state };
+        nextState.test += value;
+        return nextState;
       },
     },
   });

@@ -62,7 +62,9 @@ describe('Combined hook test', () => {
       initialState: { value: 1 },
       actions: {
         inc(state) {
-          state.value += 1;
+          const nextState = { ...state };
+          nextState.value += 1;
+          return nextState;
         },
       },
     });
