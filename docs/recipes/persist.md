@@ -1,6 +1,3 @@
-## Test
-
-
 ## Browser
 ```tsx
 import { createStore, createStoreHook } from 'tiamut'
@@ -41,6 +38,83 @@ const MyApp = () => {
       <button onClick={store.actions.inc}>Inc One</button>
     </div>
   )
+}
+
+```
+
+
+## React-native
+```tsx
+import { createStore, createStoreHook } from 'tiamut'
+import { AsyncStorage, View, Text } from 'react-native';
+
+
+const key = 'myKey'
+const defaultState = {
+  value: 1
+  isReady: false,
+  hasError: false,
+}
+
+function persist(currentState: typeof defaultState) {
+  AsyncStorage.setItem(key, JSON.stringify(currentState))
+}
+
+const fooStore = createStore(
+  initialState: defaultState,
+  actions: {
+    inc(state) {
+      state.value += 1;
+    },
+    setIsReady(state, value: boolean) {
+      state.isReady = value;
+    },
+    setHasError(state, value: boolean) {
+      state.hasError = value;
+    }
+  }
+)
+
+fooStore.subscribe(persist)
+
+function loadState() {
+  AsyncStorage.getItem(key, (error, result) => {
+    if (result) {
+      fooStore.actions.setIsReady(true);
+      fooStore.setState(JSON.parse(result));
+    } else {
+      fooStore.actions.setHasError(true);
+    }
+  })
+}
+
+const store = createStoreHook(fooStore)
+
+const Content = () => {
+  const value = store.useSelect(state => state.value);
+  return (
+    <View>
+      <Text>My value: {value}</Text>
+    </View>
+  )
+}
+
+const MyApp = () => {
+  const isReady = store.useSelect(state => state.isReady);
+
+  React.useEffect(() => {
+    loadState();
+  }, []);
+
+  if (!isReady) {
+    return (
+      <View>
+        <Text>Loading</Text>
+      </View>
+    )
+  }
+
+  return <Content />
 }
 
 ```
