@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
+import type {
   ActionsMap,
   CombinedSelectorsMap,
   CreateStoreFn,
