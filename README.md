@@ -116,3 +116,9 @@ const MyApp = () => {
   )
 };
 ```
+
+
+## Recipes
+
+- [Persisting](..docs/../docs/recipes/persist.md)
+- [Debug Changes](..docs/../docs/recipes/log.changes.md)
