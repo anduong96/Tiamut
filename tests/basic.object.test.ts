@@ -1,17 +1,20 @@
-import { createStore } from '../src';
+import { createStore, withImmer } from '../src';
+
 import { faker } from '@faker-js/faker';
 
 describe('Basic object test', () => {
   const init = { test: faker.datatype.number() };
-  const store = createStore({
-    initialState: init,
-    actions: {
-      add(state, value: number) {
-        state.test += value;
-        return state;
+
+  const store = createStore(
+    withImmer({
+      initialState: init,
+      actions: {
+        add(state, value: number) {
+          state.test += value;
+        },
       },
-    },
-  });
+    }),
+  );
 
   afterEach(() => {
     store.setState(init);

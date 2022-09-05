@@ -10,10 +10,14 @@ export type Listener<T, K> = (
 ) => void;
 
 export type Action<T> = (state: T, ...params: any[]) => T;
-
 export type ActionsMap<T> = { [key: string]: Action<T> };
 export type ModActionMap<S, T extends ActionsMap<S>> = {
   [K in keyof T]: (...params: DropFirst<Parameters<T[K]>>) => void;
+};
+
+export type CreateStoreParam<S, A extends ActionsMap<S> = ActionsMap<S>> = {
+  initialState: S;
+  actions: A;
 };
 
 export type CreateStoreFn<S, A extends ActionsMap<S>> = (param: {
