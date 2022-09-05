@@ -1,6 +1,6 @@
 {
   "name": "tiamut",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "dist/tiamut.js",
   "module": "./dist/tiamut.esm.js",
   "umd:main": "dist/tiamut.umd.js",
