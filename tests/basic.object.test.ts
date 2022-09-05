@@ -1,7 +1,7 @@
-import { createStore } from "../src";
-import { faker } from "@faker-js/faker";
+import { createStore } from '../src';
+import { faker } from '@faker-js/faker';
 
-describe("Basic object test", () => {
+describe('Basic object test', () => {
   const init = { test: faker.datatype.number() };
   const store = createStore({
     initialState: init,
@@ -17,14 +17,14 @@ describe("Basic object test", () => {
     store.destroy();
   });
 
-  it("Update state", () => {
+  it('Update state', () => {
     expect(store.getState()).toStrictEqual(init);
     store.actions.add(1);
     expect(store.getState()).toStrictEqual({ test: 1 + init.test });
     expect(store.getState()).not.toStrictEqual(init);
   });
 
-  it("Trigger subscription", () => {
+  it('Trigger subscription', () => {
     const subscription = jest.fn();
     store.subscribe(subscription);
     store.actions.add(1);
@@ -36,7 +36,7 @@ describe("Basic object test", () => {
     expect(store.getState()).not.toStrictEqual(init);
   });
 
-  it("Remove subscription", () => {
+  it('Remove subscription', () => {
     const listen = jest.fn();
     const toBeRemove = jest.fn();
     store.subscribe(listen);

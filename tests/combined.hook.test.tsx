@@ -1,9 +1,9 @@
-import { createCombinedStoresHook, createStore } from "../src";
+import { createCombinedStoresHook, createStore } from '../src';
 
-import { faker } from "@faker-js/faker";
-import { renderHook } from "@testing-library/react";
+import { faker } from '@faker-js/faker';
+import { renderHook } from '@testing-library/react';
 
-describe("Combined hook test", () => {
+describe('Combined hook test', () => {
   const initialAlpha = faker.datatype.number();
   const betaValue = faker.datatype.number();
   const alphaStore = createStore({
@@ -23,7 +23,7 @@ describe("Combined hook test", () => {
     betaStore.destroy();
   });
 
-  it("select", () => {
+  it('select', () => {
     const store = createCombinedStoresHook({
       alpha: alphaStore,
       beta: betaStore,
@@ -33,7 +33,7 @@ describe("Combined hook test", () => {
     expect(value.result.current).toStrictEqual(initialAlpha);
   });
 
-  it("creates selector", () => {
+  it('creates selector', () => {
     const store = createCombinedStoresHook(
       {
         alpha: alphaStore,
@@ -45,7 +45,7 @@ describe("Combined hook test", () => {
             return state.alpha + state.beta.value;
           },
         },
-      }
+      },
     );
 
     const value = renderHook(() => store.usePreselect.together());

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type DropFirst<T extends unknown[]> = T extends [any, ...infer U]
   ? U
   : never;
@@ -5,13 +6,12 @@ export type DropFirst<T extends unknown[]> = T extends [any, ...infer U]
 export type Listener<T, K> = (
   current: T,
   previous: T,
-  actionName: K | "setState"
+  actionName: K | 'setState',
 ) => void;
 
 export type Action<T> = (state: T, ...params: any[]) => void | T;
 
 export type ActionsMap<T> = { [key: string]: Action<T> };
-
 export type ModActionMap<S, T extends ActionsMap<S>> = {
   [K in keyof T]: (...params: DropFirst<Parameters<T[K]>>) => void;
 };
@@ -33,9 +33,6 @@ export type Store<S, A extends ActionsMap<S>> = {
 export type Selector<S, R = any> = (state: S) => R;
 export type SelectorsMap<T> = { [key: string]: Selector<T> };
 export type EqualityFn<S> = (a: S, b: S) => boolean;
-export type ModSelectorsMap<M extends SelectorsMap<any>> = {
-  [K in keyof M]: () => ReturnType<M[K]>;
-};
 
 export type StoreOrStoreParam<S, A extends ActionsMap<S> = ActionsMap<S>> =
   | Store<S, A>
@@ -46,13 +43,9 @@ export type StoreMap = {
 };
 
 export type MergeState<S extends StoreMap> = {
-  [K in keyof S]: ReturnType<S[K]["getState"]>;
+  [K in keyof S]: ReturnType<S[K]['getState']>;
 };
 
 export type CombinedSelectorsMap<S extends StoreMap> = {
   [key: string]: Selector<MergeState<S>>;
-};
-
-export type ModCombinedSelectorsMap<M extends CombinedSelectorsMap<any>> = {
-  [K in keyof M]: () => ReturnType<M[K]>;
 };

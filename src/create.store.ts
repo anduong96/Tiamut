@@ -1,12 +1,7 @@
-import type {
-  Action,
-  ActionsMap,
-  Listener,
-  ModActionMap,
-  Store,
-} from "./types";
+import type { Action, ActionsMap, Listener, Store } from './types';
 
-import produce from "immer";
+import { mergeBy } from './merge.by';
+import produce from 'immer';
 
 /**
  * It takes an initial state and an actions object, and returns an object with a setState function, a
@@ -56,7 +51,7 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
    * If the target is not a function, then it is a state object.
    */
   function isStateObject(target: S | Action<S>): target is S {
-    return typeof target !== "function";
+    return typeof target !== 'function';
   }
 
   /**
@@ -64,7 +59,7 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
    */
   function setState(
     nextState: S | Action<S>,
-    actionName?: keyof typeof actions
+    actionName?: keyof typeof actions,
   ): S {
     const newState = isStateObject(nextState)
       ? nextState
@@ -72,7 +67,7 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
 
     const previousState = state;
     state = newState;
-    publish(previousState, actionName || "setState");
+    publish(previousState, actionName || 'setState');
 
     return state;
   }
@@ -87,18 +82,13 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
     }
   }
 
-  const modActions = {} as ModActionMap<S, A>;
-  for (const actionKey of Object.keys(actions)) {
-    const action = actions[actionKey];
-    if (action) {
-      const key = actionKey as keyof A;
-      modActions[key] = (...params: unknown[]) => {
-        setState((draft) => action(draft, ...params), actionKey);
-      };
-    }
-  }
+  const modActions = mergeBy(actions, (action, key) => {
+    return (...params: unknown[]) => {
+      setState((draft) => action(draft, ...params), key);
+    };
+  });
 
-  const api = {
+  return {
     actions: modActions,
     destroy,
     subscribe,
@@ -106,6 +96,4 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
     getState,
     setState,
   };
-
-  return api;
 }

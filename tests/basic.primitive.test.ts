@@ -1,6 +1,6 @@
-import { createStore } from "../src";
+import { createStore } from '../src';
 
-describe("Basic primitive test", () => {
+describe('Basic primitive test', () => {
   const init = 1;
   const store = createStore({
     initialState: init,
@@ -16,14 +16,14 @@ describe("Basic primitive test", () => {
     store.destroy();
   });
 
-  it("Update state", () => {
+  it('Update state', () => {
     expect(store.getState()).toStrictEqual(init);
     store.actions.add(1);
     expect(store.getState()).toStrictEqual(2);
     expect(init).not.toStrictEqual(store.getState());
   });
 
-  it("Trigger subscription", () => {
+  it('Trigger subscription', () => {
     const subscription = jest.fn();
     store.subscribe(subscription);
     store.actions.add(1);

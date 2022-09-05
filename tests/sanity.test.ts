@@ -1,12 +1,12 @@
-import { createStore, createStoreHook } from "../src";
+import { createStore, createStoreHook } from '../src';
 
-describe("Sanity Test", () => {
-  it("works", () => {
+describe('Sanity Test', () => {
+  it('works', () => {
     expect(() =>
       createStore({
         initialState: 1,
         actions: {},
-      })
+      }),
     ).not.toThrowError();
 
     expect(() =>
@@ -17,14 +17,14 @@ describe("Sanity Test", () => {
             return 2;
           },
         },
-      })
+      }),
     ).not.toThrowError();
 
     expect(() =>
       createStoreHook({
         initialState: 1,
         actions: {},
-      })
+      }),
     ).not.toThrowError();
 
     expect(() =>
@@ -35,7 +35,7 @@ describe("Sanity Test", () => {
             return 2;
           },
         },
-      })
+      }),
     ).not.toThrowError();
   });
 });

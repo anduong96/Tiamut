@@ -1,7 +1,7 @@
-import { createStore } from "../src";
-import { faker } from "@faker-js/faker";
+import { createStore } from '../src';
+import { faker } from '@faker-js/faker';
 
-describe("Basic array test", () => {
+describe('Basic array test', () => {
   const makeElement = () => ({
     id: faker.datatype.string(),
     value: faker.datatype.number(),
@@ -36,7 +36,7 @@ describe("Basic array test", () => {
     store.destroy();
   });
 
-  it("Update state", () => {
+  it('Update state', () => {
     expect(store.getState()).toStrictEqual(init);
     const newElement = makeElement();
     store.actions.addElement(newElement.id, newElement.value);
