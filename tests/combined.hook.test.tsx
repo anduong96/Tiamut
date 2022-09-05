@@ -1,5 +1,6 @@
 import { createCombinedStoresHook, createStore } from '../src';
 
+import { act } from 'react-dom/test-utils';
 import { faker } from '@faker-js/faker';
 import { renderHook } from '@testing-library/react';
 
@@ -8,7 +9,11 @@ describe('Combined hook test', () => {
   const betaValue = faker.datatype.number();
   const alphaStore = createStore({
     initialState: initialAlpha,
-    actions: {},
+    actions: {
+      incOne(state) {
+        return state + 1;
+      },
+    },
   });
 
   const betaStore = createStore({
@@ -50,5 +55,31 @@ describe('Combined hook test', () => {
 
     const value = renderHook(() => store.usePreselect.together());
     expect(value.result.current).toStrictEqual(betaValue + initialAlpha);
+  });
+
+  it('run action', async () => {
+    const alpha = createStore({
+      initialState: { value: 1 },
+      actions: {
+        inc(state) {
+          state.value += 1;
+        },
+      },
+    });
+
+    const beta = createStore({
+      initialState: 0,
+      actions: {},
+    });
+
+    const store = createCombinedStoresHook({
+      alpha,
+      beta,
+    });
+
+    const value = renderHook(() => store.useSelect((s) => s.alpha.value));
+    expect(value.result.current).toStrictEqual(1);
+    await act(() => store.actions.alpha.inc());
+    expect(value.result.current).toStrictEqual(2);
   });
 });

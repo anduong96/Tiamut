@@ -66,7 +66,7 @@ export function createCombinedStoresHook<
     return mergeBy(selectors, (selector) => () => makeHook(selector));
   }
 
-  function modActions() {
+  function modActions(): { [K in keyof S]: S[K]['actions'] } {
     return mergeBy(storeMap, (store) => store.actions);
   }
 

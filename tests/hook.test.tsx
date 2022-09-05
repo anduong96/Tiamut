@@ -1,14 +1,12 @@
+import { act, renderHook } from '@testing-library/react';
+
 import { createStore } from '../src';
 import { createStoreHook } from '../src/react';
 import { faker } from '@faker-js/faker';
-import { renderHook } from '@testing-library/react';
 
 describe('Hook test', () => {
   const initialState = faker.datatype.number();
-  const testStore = createStore({
-    initialState,
-    actions: {},
-  });
+  const testStore = createStore({ initialState, actions: {} });
 
   afterEach(() => {
     testStore.setState(initialState);
@@ -33,5 +31,23 @@ describe('Hook test', () => {
 
     const value = renderHook(() => store.usePreselect.withRand());
     expect(value.result.current).toStrictEqual(rand + initialState);
+  });
+
+  it('run action', async () => {
+    const store = createStoreHook(
+      createStore({
+        initialState,
+        actions: {
+          inc(state) {
+            return state + 1;
+          },
+        },
+      }),
+    );
+
+    const value = renderHook(() => store.useSelect((s) => s));
+    expect(value.result.current).toStrictEqual(initialState);
+    await act(() => store.actions.inc());
+    expect(value.result.current).toStrictEqual(initialState + 1);
   });
 });
