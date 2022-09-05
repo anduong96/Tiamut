@@ -1,8 +1,4 @@
 {
-  "cSpell.words": [
-    "Duong",
-    "immer",
-    "tiamut"
-  ],
+  "cSpell.words": ["Duong", "immer", "tiamut", "zustand"],
   "jest.jestCommandLine": "jest"
 }
