@@ -2,6 +2,7 @@ import type { Action, ActionsMap, Listener, Store } from './types';
 
 import { isStateObject } from './lib/is.state.object';
 import { mergeBy } from './lib/merge.by';
+import { shallowCopy } from './lib/shallow.copy';
 
 /**
  * It takes an initial state and an actions object, and returns an object with a setState function, a
@@ -37,14 +38,14 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
    * @returns The state variable is being returned.
    */
   function getState() {
-    return Object.freeze(state);
+    return shallowCopy(state);
   }
 
   /**
    * It returns a copy of the initial state object, but with the `Object.freeze()` method applied to it
    */
   function getInitialState() {
-    return initialState;
+    return shallowCopy(initialState);
   }
 
   /**
@@ -61,7 +62,10 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
     nextState: S | Action<S>,
     actionName?: keyof typeof actions,
   ): S {
-    const newState = isStateObject(nextState) ? nextState : nextState(state);
+    const newState = isStateObject(nextState)
+      ? nextState
+      : nextState(shallowCopy(state));
+
     const previousState = state;
     state = newState;
     publish(previousState, actionName || 'setState');

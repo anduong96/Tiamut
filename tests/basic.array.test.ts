@@ -14,18 +14,16 @@ describe('Basic array test', () => {
     initialState: init,
     actions: {
       updateElementValue(state, elementId: string, value: number) {
-        const nextState = [...state];
-        const element = nextState.find((item) => item.id === elementId);
+        const element = state.find((item) => item.id === elementId);
         if (element) {
           element.value = value;
         }
 
-        return nextState;
+        return state;
       },
       addElement(state, elementId: string, value: number) {
-        const nextState = [...state];
-        nextState.unshift({ id: elementId, value });
-        return nextState;
+        state.unshift({ id: elementId, value });
+        return state;
       },
       removeElement(state, elementId: string) {
         return state.filter((item) => item.id !== elementId);
