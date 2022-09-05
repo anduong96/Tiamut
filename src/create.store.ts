@@ -37,7 +37,7 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
    * @returns The state variable is being returned.
    */
   function getState() {
-    return state;
+    return Object.freeze(state);
   }
 
   /**
