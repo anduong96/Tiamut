@@ -29,12 +29,10 @@ jobs:
           node-version: 16
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Lint
-        uses: wearerequired/lint-action@v1
-        with:
-          eslint: true
+        run: npm run lint
 
       - name: Test
         run: npm run test
