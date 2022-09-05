@@ -21,13 +21,14 @@ export type CreateStoreFn<S, A extends ActionsMap<S>> = (param: {
   actions: A;
 }) => Store<S, A>;
 
-export type Store<S, A extends ActionsMap<S>> = {
+export type Store<S, A extends ActionsMap<S> = ActionsMap<S>> = {
   actions: ModActionMap<S, A>;
   destroy: () => void;
   subscribe: (listener: Listener<S, keyof ModActionMap<S, A>>) => () => boolean;
-  getState: () => S;
+  getState: () => Readonly<S>;
   resetState: () => void;
   setState: (nextState: S | Action<S>, actionName?: string) => S;
+  getInitialState: () => Readonly<S>;
 };
 
 export type Selector<S, R = any> = (state: S) => R;

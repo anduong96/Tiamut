@@ -41,6 +41,13 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
   }
 
   /**
+   * It returns a copy of the initial state object, but with the `Object.freeze()` method applied to it
+   */
+  function getInitialState() {
+    return Object.freeze(initialState);
+  }
+
+  /**
    * `resetState` is a function that sets the state to the initial state
    */
   function resetState() {
@@ -67,6 +74,7 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
 
     const previousState = state;
     state = newState;
+
     publish(previousState, actionName || 'setState');
 
     return state;
@@ -95,5 +103,6 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
     resetState,
     getState,
     setState,
+    getInitialState,
   };
 }

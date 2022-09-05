@@ -42,7 +42,9 @@ export function createCombinedStoresHook<
   }
 
   function getState() {
-    return mergeBy(storeMap, (store) => store.getState());
+    return mergeBy(storeMap, (store: Store<unknown>) => store.getState()) as {
+      [K in keyof S]: ReturnType<S[K]['getState']>;
+    };
   }
 
   function makeHook(selector: Selector<M>, equalityFn?: EqualityFn<M>) {
