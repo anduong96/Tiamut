@@ -30,21 +30,30 @@ export function createCombinedStoresHook<
 >(storeMap: S, options?: { selectors: O }) {
   const { selectors } = options ?? {};
   type M = MergeState<S>;
+  let state = mergeBy(storeMap, (store: Store<M>) => store.getState()) as M;
 
-  function subscribe(listener: Listener<unknown, unknown>) {
-    const removeList = Object.values(storeMap).map((store) =>
-      store.subscribe(listener),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function updateState(storeK: keyof StoreMap, nextState: any) {
+    if (typeof storeK === 'string' && state[storeK]) {
+      state = { ...state, [storeK]: nextState };
+    }
+  }
+
+  function subscribe(listener: Listener<M, string>) {
+    const removeList = Object.keys(storeMap).map((storeK: keyof StoreMap) =>
+      storeMap[storeK]?.subscribe((current, previous, actionName) => {
+        updateState(storeK, current);
+        return listener(current, previous, `${storeK}/${String(actionName)}`);
+      }),
     );
 
     return () => {
-      removeList.forEach((fn) => fn());
+      removeList.forEach((fn) => fn?.());
     };
   }
 
   function getState() {
-    return mergeBy(storeMap, (store: Store<unknown>) => store.getState()) as {
-      [K in keyof S]: ReturnType<S[K]['getState']>;
-    };
+    return state;
   }
 
   function makeHook(selector: Selector<M>, equalityFn?: EqualityFn<M>) {

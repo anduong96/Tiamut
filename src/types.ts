@@ -6,7 +6,7 @@ export type DropFirst<T extends unknown[]> = T extends [any, ...infer U]
 export type Listener<T, K> = (
   current: T,
   previous: T,
-  actionName: K | 'setState',
+  actionName: K | 'setState' | 'resetState',
 ) => void;
 
 export type Action<T> = (state: T, ...params: any[]) => T;
