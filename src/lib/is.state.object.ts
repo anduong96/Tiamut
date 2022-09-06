@@ -1,4 +1,4 @@
-import { Action } from '../types';
+import type { Action } from '../types';
 
 /**
  * If the target is not a function, then it is a state object.

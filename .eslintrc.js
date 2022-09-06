@@ -18,6 +18,7 @@ module.exports = {
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     'no-console': 'error',
+    "@typescript-eslint/consistent-type-imports": "error"
   },
   ignorePatterns: ['**/*.js'],
 };

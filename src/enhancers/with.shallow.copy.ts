@@ -1,4 +1,4 @@
-import { ActionsMap, CreateStoreParam, DropFirst } from '../types';
+import type { ActionsMap, CreateStoreParam, DropFirst } from '../types';
 
 import { mergeBy } from '../lib/merge.by';
 import { shallowCopy } from '../lib/shallow.copy';
