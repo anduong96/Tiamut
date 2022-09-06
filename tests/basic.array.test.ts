@@ -1,12 +1,8 @@
 import { createStore } from '../src';
 import { faker } from '@faker-js/faker';
+import { makeElement } from './utils/make.element';
 
 describe('Basic array test', () => {
-  const makeElement = () => ({
-    id: faker.datatype.string(),
-    value: faker.datatype.number(),
-  });
-
   const length = faker.datatype.number({ min: 5, max: 10 });
   const init = Array.from({ length }).map(makeElement);
 
@@ -14,16 +10,18 @@ describe('Basic array test', () => {
     initialState: init,
     actions: {
       updateElementValue(state, elementId: string, value: number) {
-        const element = state.find((item) => item.id === elementId);
+        const nextState = [...state];
+        const element = nextState.find((item) => item.id === elementId);
         if (element) {
           element.value = value;
         }
 
-        return state;
+        return nextState;
       },
       addElement(state, elementId: string, value: number) {
-        state.unshift({ id: elementId, value });
-        return state;
+        const nextState = [...state];
+        nextState.unshift({ id: elementId, value });
+        return nextState;
       },
       removeElement(state, elementId: string) {
         return state.filter((item) => item.id !== elementId);

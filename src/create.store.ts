@@ -62,10 +62,7 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
     nextState: S | Action<S>,
     actionName?: keyof typeof actions,
   ): S {
-    const newState = isStateObject(nextState)
-      ? nextState
-      : nextState(shallowCopy(state));
-
+    const newState = isStateObject(nextState) ? nextState : nextState(state);
     const previousState = state;
     state = newState;
     publish(previousState, actionName || 'setState');
