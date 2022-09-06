@@ -76,6 +76,7 @@ export function createCombinedStoresHook<
     useSelect: select,
     usePreselect: modSelectors(),
     actions: modActions(),
+    getState,
   };
 }
 
@@ -117,5 +118,6 @@ export function createStoreHook<
     useSelect: select,
     usePreselect: modSelectors(),
     actions: store.actions,
+    getState: store.getState,
   };
 }
