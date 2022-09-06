@@ -1,49 +1,57 @@
-## Browser
-```tsx
-import { createStore, createStoreHook } from 'tiamut'
+# Persisting
 
-const key = 'myKey'
+You may want to persist value for whatever reason
+
+<br />
+<br />
+
+# Examples
+
+## Browser
+
+```tsx
+import { createStore, createStoreHook } from 'tiamut';
+
+const key = 'myKey';
 const defaultState = {
-  value: 1
-}
+  value: 1,
+};
 
 function load() {
-  const initialState = window.localStorage.getItem(key)
-  return initialState ? JSON.parse(initialState) : defaultState
+  const initialState = window.localStorage.getItem(key);
+  return initialState ? JSON.parse(initialState) : defaultState;
 }
 
 function persist(currentState: typeof defaultState) {
-  window.localStorage.setItem(key, JSON.stringify(currentState))
+  window.localStorage.setItem(key, JSON.stringify(currentState));
 }
 
-const fooStore = createStore(
+const fooStore = createStore({
   initialState: load(),
   actions: {
     inc(state) {
       state.value += 1;
-    }
-    // your actions
-  }
-)
+    },
+  },
+});
 
-fooStore.subscribe(persist)
+fooStore.subscribe(persist);
 
-const store = createStoreHook(fooStore)
+const store = createStoreHook(fooStore);
 const MyApp = () => {
-  const value = store.useSelect(state => state.value)
+  const value = store.useSelect((state) => state.value);
 
   return (
     <div>
       <div>{value}</div>
       <button onClick={store.actions.inc}>Inc One</button>
     </div>
-  )
-}
-
+  );
+};
 ```
 
-
 ## React-native
+
 ```tsx
 import { createStore, createStoreHook } from 'tiamut'
 import { AsyncStorage, View, Text } from 'react-native';
@@ -60,7 +68,7 @@ function persist(currentState: typeof defaultState) {
   AsyncStorage.setItem(key, JSON.stringify(currentState))
 }
 
-const fooStore = createStore(
+const fooStore = createStore({
   initialState: defaultState,
   actions: {
     inc(state) {
@@ -73,7 +81,7 @@ const fooStore = createStore(
       state.hasError = value;
     }
   }
-)
+})
 
 fooStore.subscribe(persist)
 
