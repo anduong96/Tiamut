@@ -21,7 +21,7 @@ const fooStore = createStore(
       },
     },
   }),
-
+);
 
 const store = createStoreHook(fooStore);
 
