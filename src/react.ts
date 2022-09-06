@@ -32,17 +32,10 @@ export function createCombinedStoresHook<
   type M = MergeState<S>;
   let state = mergeBy(storeMap, (store: Store<M>) => store.getState()) as M;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function updateState(storeK: keyof StoreMap, nextState: any) {
-    if (typeof storeK === 'string' && state[storeK]) {
-      state = { ...state, [storeK]: nextState };
-    }
-  }
-
   function subscribe(listener: Listener<M, string>) {
     const removeList = Object.keys(storeMap).map((storeK: keyof StoreMap) =>
       storeMap[storeK]?.subscribe((current, previous, actionName) => {
-        updateState(storeK, current);
+        state = { ...state, [storeK]: current };
         return listener(current, previous, `${storeK}/${String(actionName)}`);
       }),
     );
@@ -86,6 +79,7 @@ export function createCombinedStoresHook<
     usePreselect: modSelectors(),
     actions: modActions(),
     getState,
+    subscribe,
   };
 }
 
@@ -128,5 +122,6 @@ export function createStoreHook<
     usePreselect: modSelectors(),
     actions: store.actions,
     getState: store.getState,
+    subscribe: store.subscribe,
   };
 }
