@@ -30,7 +30,10 @@ const fooStore = createStore({
   initialState: load(),
   actions: {
     inc(state) {
-      state.value += 1;
+      return {
+        ...state,
+        value: state.value + 1,
+      };
     },
   },
 });
@@ -72,13 +75,22 @@ const fooStore = createStore({
   initialState: defaultState,
   actions: {
     inc(state) {
-      state.value += 1;
+      return {
+        ...state,
+        value
+      }
     },
     setIsReady(state, value: boolean) {
-      state.isReady = value;
+      return {
+        ...state,
+        isReady: value
+      }
     },
     setHasError(state, value: boolean) {
-      state.hasError = value;
+      return {
+        ...state,
+        hasError: value
+      }
     }
   }
 })
