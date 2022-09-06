@@ -1,6 +1,12 @@
-import { DropFirst } from 'src/types';
+import type { DropFirst } from '../types';
+import type { IProduce } from 'immer/dist/internal';
 import { mergeBy } from '../lib/merge.by';
-import produce from 'immer';
+
+let produce: IProduce;
+try {
+  produce = require('immer');
+  // eslint-disable-next-line no-empty
+} catch (e) {}
 
 /**
  * Add immer super power to store
@@ -10,6 +16,10 @@ export function withImmer<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   A extends { [K: string]: (state: S, ...params: any[]) => S | void },
 >(param: { initialState: S; actions: A }) {
+  if (!produce) {
+    throw new Error('immer module is missing!');
+  }
+
   const modActions = mergeBy(
     param.actions,
     (action) =>

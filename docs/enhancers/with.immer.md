@@ -2,6 +2,13 @@
 
 This will modify your actions without having to spread and return new state.
 
+# Prerequisite
+Make sure you have immer
+
+```bash
+npm i -S immer
+```
+
 # Example
 
 ```tsx
