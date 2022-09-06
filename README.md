@@ -127,8 +127,8 @@ const MyApp = () => {
 ```
 
 ## Enhancers
-- [With Shallow](.docs/enhancers/with.shallow.md)
-- [With Immer](.docs/enhancers/with.immer.md)
+- [With Shallow](./docs/enhancers/with.shallow.md)
+- [With Immer](./docs/enhancers/with.immer.md)
 
 ## Recipes
 
