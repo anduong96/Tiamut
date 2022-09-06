@@ -4,7 +4,8 @@ import { mergeBy } from '../lib/merge.by';
 
 let produce: IProduce;
 try {
-  produce = require('immer');
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  produce = require('immer').default;
   // eslint-disable-next-line no-empty
 } catch (e) {}
 
