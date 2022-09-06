@@ -26,9 +26,10 @@ const store = createStoreHook(
     },
     actions: {
       addOne(state) {
-        const nextState = { ...nextState }
-        nextState.value += 1;
-        return nextState;
+        return {
+          ...state,
+          value: value + 1,
+        };
       },
     },
   }),
@@ -69,9 +70,10 @@ const bar = createStore({
   },
   actions: {
     addOne(state) {
-      const nextState = { ...state };
-      nextState.value += 1
-      return nextState;
+      return {
+        ...state,
+        value: state.value + 1
+      }
     }
   }
 });
@@ -99,8 +101,6 @@ const MyApp = () => {
 };
 ```
 
-
-
 ## With Preselect
 
 ```tsx
@@ -127,6 +127,7 @@ const MyApp = () => {
 ```
 
 ## Enhancers
+
 - [With Shallow](./docs/enhancers/with.shallow.md)
 - [With Immer](./docs/enhancers/with.immer.md)
 
