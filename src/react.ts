@@ -30,19 +30,43 @@ export function createCombinedStoresHook<
 >(storeMap: S, options?: { selectors: O }) {
   const { selectors } = options ?? {};
   type M = MergeState<S>;
+  type TListener = Listener<M, string>;
   let state = mergeBy(storeMap, (store: Store<M>) => store.getState()) as M;
+  const listeners = new Set<TListener>();
+
+  function publish(previousState: M, storeK: string, actionName: string) {
+    const actionK = `${storeK}/${actionName}`;
+    for (const listener of Array.from(listeners)) {
+      listener(state, previousState, actionK);
+    }
+  }
+
+  function updateState(
+    storeK: string,
+    actionName: string,
+    storeState: unknown,
+  ) {
+    const previous = state;
+    const nextState = {
+      ...state,
+      [storeK]: storeState,
+    };
+
+    state = nextState;
+    publish(previous, storeK, actionName);
+  }
+
+  function subscribeToToStores() {
+    for (const storeK of Object.keys(storeMap)) {
+      storeMap[storeK]?.subscribe((storeState, _, actionName) => {
+        updateState(storeK, actionName as string, storeState);
+      });
+    }
+  }
 
   function subscribe(listener: Listener<M, string>) {
-    const removeList = Object.keys(storeMap).map((storeK: keyof StoreMap) =>
-      storeMap[storeK]?.subscribe((current, previous, actionName) => {
-        state = { ...state, [storeK]: current };
-        return listener(current, previous, `${storeK}/${String(actionName)}`);
-      }),
-    );
-
-    return () => {
-      removeList.forEach((fn) => fn?.());
-    };
+    listeners.add(listener);
+    return () => listeners.delete(listener);
   }
 
   function getState() {
@@ -73,6 +97,8 @@ export function createCombinedStoresHook<
   function modActions(): { [K in keyof S]: S[K]['actions'] } {
     return mergeBy(storeMap, (store) => store.actions);
   }
+
+  subscribeToToStores();
 
   return {
     useSelect: select,
