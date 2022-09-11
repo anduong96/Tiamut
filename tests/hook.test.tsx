@@ -19,20 +19,6 @@ describe('Hook test', () => {
     expect(value.result.current).toStrictEqual(initialState);
   });
 
-  it('creates selector', () => {
-    const rand = faker.datatype.number();
-    const store = createStoreHook(testStore, {
-      selectors: {
-        withRand(state) {
-          return state + rand;
-        },
-      },
-    });
-
-    const value = renderHook(() => store.usePreselect.withRand());
-    expect(value.result.current).toStrictEqual(rand + initialState);
-  });
-
   it('run action', async () => {
     const store = createStoreHook(
       createStore({

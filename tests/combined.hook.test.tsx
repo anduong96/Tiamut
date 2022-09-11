@@ -38,25 +38,6 @@ describe('Combined hook test', () => {
     expect(value.result.current).toStrictEqual(initialAlpha);
   });
 
-  it('creates selector', () => {
-    const store = createCombinedStoresHook(
-      {
-        alpha: alphaStore,
-        beta: betaStore,
-      },
-      {
-        selectors: {
-          together(state) {
-            return state.alpha + state.beta.value;
-          },
-        },
-      },
-    );
-
-    const value = renderHook(() => store.usePreselect.together());
-    expect(value.result.current).toStrictEqual(betaValue + initialAlpha);
-  });
-
   it('run action', async () => {
     const alpha = createStore({
       initialState: { value: 1 },

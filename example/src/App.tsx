@@ -13,18 +13,10 @@ const store = createStoreHook(
       },
     },
   }),
-  {
-    selectors: {
-      withTenMore(state) {
-        return state + 10;
-      },
-    },
-  },
 );
 
 function App() {
   const value = store.useSelect((state) => state);
-  const preselected = store.usePreselect.withTenMore();
   const renderCt = React.useRef(0);
 
   React.useEffect(() => {
@@ -35,7 +27,6 @@ function App() {
     <div className="app">
       <div className="content">
         <div className="value">Value: {value}</div>
-        <div className="value">Preselected: {preselected}</div>
         <div className="value">Render Count: {renderCt.current}</div>
         <br />
         <button onClick={store.actions.inc}>Inc</button>

@@ -1,13 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type {
   ActionsMap,
-  CombinedSelectorsMap,
   CreateStoreFn,
   EqualityFn,
   Listener,
   MergeState,
   Selector,
-  SelectorsMap,
   Store,
   StoreMap,
   StoreOrStoreParam,
@@ -24,11 +22,7 @@ function isStore<S, A extends ActionsMap<S>>(
   return 'getState' in store;
 }
 
-export function createCombinedStoresHook<
-  S extends StoreMap,
-  O extends CombinedSelectorsMap<S>,
->(storeMap: S, options?: { selectors: O }) {
-  const { selectors } = options ?? {};
+export function createCombinedStoresHook<S extends StoreMap>(storeMap: S) {
   type M = MergeState<S>;
   type TListener = Listener<M, string>;
   let state = mergeBy(storeMap, (store: Store<M>) => store.getState()) as M;
@@ -116,14 +110,6 @@ export function createCombinedStoresHook<
   }
 
   /**
-   * It takes a list of selectors and returns a list of selectors that have been modified to call a
-   * hook
-   */
-  function modSelectors() {
-    return mergeBy(selectors, (selector) => () => makeHook(selector));
-  }
-
-  /**
    * It takes a map of stores and returns a map of actions
    */
   function modActions(): { [K in keyof S]: S[K]['actions'] } {
@@ -134,20 +120,16 @@ export function createCombinedStoresHook<
 
   return {
     useSelect: select,
-    usePreselect: modSelectors(),
     actions: modActions(),
     getState,
     subscribe,
   };
 }
 
-export function createStoreHook<
-  State,
-  A extends ActionsMap<State>,
-  O extends SelectorsMap<State>,
->(_store: StoreOrStoreParam<State, A>, options?: { selectors?: O }) {
+export function createStoreHook<State, A extends ActionsMap<State>>(
+  _store: StoreOrStoreParam<State, A>,
+) {
   const store = isStore(_store) ? _store : createStore(_store);
-  const { selectors } = options ?? {};
 
   /**
    * It returns a value that is always in sync with the value returned by the selector function
@@ -175,15 +157,8 @@ export function createStoreHook<
     return makeHook(selector, equalityFn) as unknown as T;
   }
 
-  function modSelectors() {
-    return mergeBy(selectors, (selector) => () => makeHook(selector)) as {
-      [K in keyof O]: () => ReturnType<O[K]>;
-    };
-  }
-
   return {
     useSelect: select,
-    usePreselect: modSelectors(),
     actions: store.actions,
     getState: store.getState,
     subscribe: store.subscribe,

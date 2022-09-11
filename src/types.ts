@@ -35,8 +35,7 @@ export type Store<S, A extends ActionsMap<S> = ActionsMap<S>> = {
   getInitialState: () => Readonly<S>;
 };
 
-export type Selector<S, R = any> = (state: S) => R;
-export type SelectorsMap<T> = { [key: string]: Selector<T> };
+export type Selector<S, R = any> = (state: S, ...params: any[]) => R;
 export type EqualityFn<S> = (a: S, b: S) => boolean;
 
 export type StoreOrStoreParam<S, A extends ActionsMap<S> = ActionsMap<S>> =
@@ -49,8 +48,4 @@ export type StoreMap = {
 
 export type MergeState<S extends StoreMap> = {
   [K in keyof S]: ReturnType<S[K]['getState']>;
-};
-
-export type CombinedSelectorsMap<S extends StoreMap> = {
-  [key: string]: Selector<MergeState<S>>;
 };

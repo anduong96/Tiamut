@@ -101,31 +101,6 @@ const MyApp = () => {
 };
 ```
 
-## With Preselect
-
-```tsx
-import { createStoreHook } from 'tiamut';
-
-const store = createStoreHook(
-  {
-    initialState: 1,
-    actions: {},
-  },
-  {
-    selectors: {
-      withAdditionTen(state) {
-        return state + 10;
-      },
-    },
-  },
-);
-
-const MyApp = () => {
-  const value = store.usePreselect.withAdditionTen();
-  return <div>{value}</div>;
-};
-```
-
 ## Enhancers
 
 - [With Shallow](./docs/enhancers/with.shallow.md)
