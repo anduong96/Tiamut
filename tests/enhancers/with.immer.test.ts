@@ -1,4 +1,4 @@
-import { createStore, withImmer, withShallow } from '../../src';
+import { createStore, withImmer } from '../../src';
 
 import { faker } from '@faker-js/faker';
 import { makeElement } from '../utils/make.element';
