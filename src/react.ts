@@ -55,7 +55,10 @@ export function createCombinedStoresHook<S extends StoreMap>(storeMap: S) {
     };
 
     state = nextState;
-    publish(previous, storeK, actionName);
+
+    if (previous[storeK] !== nextState[storeK]) {
+      publish(previous, storeK, actionName);
+    }
   }
 
   /**
