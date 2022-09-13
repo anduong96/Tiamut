@@ -91,7 +91,7 @@ export function createCombinedStoresHook<S extends StoreMap>(storeMap: S) {
    * It returns a value that is derived from the state of the store, and it will automatically update
    * whenever the state of the store changes
    */
-  function makeHook(selector: Selector<M>, equalityFn?: EqualityFn<M>) {
+  function makeHook<R>(selector: Selector<M, R>, equalityFn?: EqualityFn<R>) {
     const value = useSyncExternalStoreWithSelector(
       subscribe,
       getState,
@@ -108,8 +108,8 @@ export function createCombinedStoresHook<S extends StoreMap>(storeMap: S) {
    * `select` is a function that takes a selector function and an optional equality function and returns
    * value of the selector function
    */
-  function select<T>(selector: Selector<M, T>, equalityFn?: EqualityFn<M>): T {
-    return makeHook(selector, equalityFn) as unknown as T;
+  function select<T>(selector: Selector<M, T>, equalityFn?: EqualityFn<T>): T {
+    return makeHook<T>(selector, equalityFn) as unknown as T;
   }
 
   /**
@@ -137,7 +137,10 @@ export function createStoreHook<State, A extends ActionsMap<State>>(
   /**
    * It returns a value that is always in sync with the value returned by the selector function
    */
-  function makeHook(selector: Selector<State>, equalityFn?: EqualityFn<State>) {
+  function makeHook<R>(
+    selector: Selector<State, R>,
+    equalityFn?: EqualityFn<R>,
+  ) {
     const value = useSyncExternalStoreWithSelector(
       store.subscribe,
       store.getState,
@@ -155,9 +158,9 @@ export function createStoreHook<State, A extends ActionsMap<State>>(
    */
   function select<T>(
     selector: Selector<State, T>,
-    equalityFn?: EqualityFn<State>,
+    equalityFn?: EqualityFn<T>,
   ): T {
-    return makeHook(selector, equalityFn) as unknown as T;
+    return makeHook<T>(selector, equalityFn) as unknown as T;
   }
 
   return {
