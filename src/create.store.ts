@@ -63,13 +63,8 @@ export function createStore<S, A extends ActionsMap<S>>(param: {
   ): S {
     const newState = isStateObject(nextState) ? nextState : nextState(state);
     const previousState = state;
-    const isStateChange = newState !== previousState;
     state = newState;
-
-    if (isStateChange) {
-      publish(previousState, actionName || 'setState');
-    }
-
+    publish(previousState, actionName || 'setState');
     return state;
   }
 
