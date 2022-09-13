@@ -2,6 +2,7 @@
 import type {
   ActionsMap,
   CreateStoreFn,
+  CreateStoreHookOptions,
   EqualityFn,
   Listener,
   MergeState,
@@ -13,6 +14,7 @@ import type {
 
 import React from 'react';
 import { createStore } from './create.store';
+import { isEqual } from './lib/is.equal';
 import { mergeBy } from './lib/merge.by';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector';
 
@@ -22,11 +24,16 @@ function isStore<S, A extends ActionsMap<S>>(
   return 'getState' in store;
 }
 
-export function createCombinedStoresHook<S extends StoreMap>(storeMap: S) {
+export function createCombinedStoresHook<S extends StoreMap>(
+  storeMap: S,
+  options?: CreateStoreHookOptions,
+) {
   type M = MergeState<S>;
   type TListener = Listener<M, string>;
-  let state = mergeBy(storeMap, (store: Store<M>) => store.getState()) as M;
   const listeners = new Set<TListener>();
+  const equalFn = options?.useShallowEqual ? isEqual : undefined;
+
+  let state = mergeBy(storeMap, (store: Store<M>) => store.getState()) as M;
 
   /**
    * It takes the previous state, the store key, and the action name, and then it loops through all the
@@ -94,7 +101,7 @@ export function createCombinedStoresHook<S extends StoreMap>(storeMap: S) {
       getState,
       getState,
       selector,
-      equalityFn,
+      equalityFn ?? equalFn,
     );
 
     React.useDebugValue(value);
@@ -128,8 +135,10 @@ export function createCombinedStoresHook<S extends StoreMap>(storeMap: S) {
 
 export function createStoreHook<State, A extends ActionsMap<State>>(
   _store: StoreOrStoreParam<State, A>,
+  options?: CreateStoreHookOptions,
 ) {
   const store = isStore(_store) ? _store : createStore(_store);
+  const equalFn = options?.useShallowEqual ? isEqual : undefined;
 
   /**
    * It returns a value that is always in sync with the value returned by the selector function
@@ -143,7 +152,7 @@ export function createStoreHook<State, A extends ActionsMap<State>>(
       store.getState,
       store.getState,
       selector,
-      equalityFn,
+      equalityFn ?? equalFn,
     );
 
     React.useDebugValue(value);

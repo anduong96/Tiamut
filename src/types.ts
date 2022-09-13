@@ -49,3 +49,11 @@ export type StoreMap = {
 export type MergeState<S extends StoreMap> = {
   [K in keyof S]: ReturnType<S[K]['getState']>;
 };
+
+export type CreateStoreHookOptions = {
+  /**
+   * Use compare all selectors with
+   * shallow equal for performance optimization
+   */
+  useShallowEqual?: boolean;
+};
